@@ -2,8 +2,8 @@
 using ToyRobotCLI;
 int placeDirectionCommandCount = 3;
 int placeWithoutDirectionCommandCount = 2;
-RobotTable table = new RobotTable(6, 6);
-Robot robot = new Robot(table);
+RobotTable table = new (6, 6);
+Robot robot = new (table);
 
 Console.WriteLine("Welcome to the toy robot 1000");
 Console.WriteLine($"Please enter one of the following commands{Environment.NewLine}" +
@@ -23,11 +23,13 @@ while(action?.ToLower() != "quit")
                 //4 inputs also updates the robot direction
                 bool updateRobotDirection = placeValues.Length == placeDirectionCommandCount;
                 int? x = PlaceHelper.GetNumber(placeValues[0]);
-                int? y = PlaceHelper.GetNumber(placeValues[1]);
+                int? y = PlaceHelper.GetNumber(placeValues[1]); 
+                string robotDirectionString = "";
                 RobotDirection? robotDirection = null;
                 if (updateRobotDirection)
                 {
-                    robotDirection = PlaceHelper.GetRobotDirection(placeValues[2]);
+                    robotDirectionString = placeValues[2];
+                    robotDirection = PlaceHelper.GetRobotDirection(robotDirectionString);
                 }
 
                 if (x.HasValue && y.HasValue)
@@ -36,7 +38,8 @@ while(action?.ToLower() != "quit")
                     {
                         if (!robotDirection.HasValue || !robot.Place(x.Value, y.Value, robotDirection.Value))
                         {
-                            Console.WriteLine($"Unable to place robot at ({x.Value},{y.Value},{robotDirection.Value}");
+                            string robotDir = robotDirection.HasValue ? robotDirection.Value.ToString() : robotDirectionString;
+                            Console.WriteLine($"Unable to place robot at ({x.Value},{y.Value},{robotDir})");
                         }
                     }
                     else
@@ -47,9 +50,20 @@ while(action?.ToLower() != "quit")
                         }
                     }
                 }
+                else
+                {
+                    Console.WriteLine("Invalid Place Command");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Invalid Place Command");
             }
         }
-        //Can have 3 inputs EG (PLACE 3, 1) or 4 inputs (EG. PLACE 3, 1, NORTH)
+        else
+        {
+            Console.WriteLine("Invalid Place Command");
+        }
         
     }
     if (action?.ToLower() == "move")
