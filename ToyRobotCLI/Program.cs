@@ -6,28 +6,42 @@ Robot robot = new Robot(table);
 
 Console.WriteLine("Welcome to the toy robot 1000");
 Console.WriteLine($"Please enter one of the following commands{Environment.NewLine}" +
-    $"\t- PLACE{Environment.NewLine}\t- MOVE{Environment.NewLine}\t- LEFT{Environment.NewLine}\t- RIGHT{Environment.NewLine}\t- REPORT{Environment.NewLine}\t- Quit to Exit");
+    $"\t- PLACE X, Y, DIRECTION({RobotDirection.NORTH}, {RobotDirection.SOUTH}, {RobotDirection.EAST}, {RobotDirection.WEST}){Environment.NewLine}\t- MOVE{Environment.NewLine}\t- LEFT{Environment.NewLine}\t- RIGHT{Environment.NewLine}\t- REPORT{Environment.NewLine}\t- Quit to Exit");
 var action = Console.ReadLine();
 
 while(action?.ToLower() != "quit")
 {
-    if(action?.ToLower() == "place")
+    if(action?.ToLower().StartsWith("place") == true)
     {
-        int? x = PlaceHelper.GetNumber("Please enter x location (Empty to exit):");
-        //null returns to the menu
-        if (x.HasValue)
+        //place requires spaces betweeen values to work
+        var placeValues = action.Split(' ');
+        //Can have 3 inputs EG (PLACE 3, 1) or 4 inputs (EG. PLACE 3, 1, NORTH)
+        if(placeValues.Length == 3 || placeValues.Length == 4)
         {
-            int? y = PlaceHelper.GetNumber("Please enter y location (Empty to exit):");
-            //null returns to the menu
-            if (y.HasValue)
+            //4 inputs also updates the robot direction
+            bool updateRobotDirection = placeValues.Length == 4;
+            int? x = PlaceHelper.GetNumber(placeValues[1]);
+            int? y = PlaceHelper.GetNumber(placeValues[2]);
+            RobotDirection? robotDirection = null;
+            if(updateRobotDirection)
             {
-                RobotDirection? robotDirection = PlaceHelper.GetRobotDirection($"Please enter robot direction ({RobotDirection.NORTH}, {RobotDirection.SOUTH}, {RobotDirection.EAST}, {RobotDirection.WEST}, Empty to exit)");
-                //null returns to the menu
-                if (robotDirection.HasValue)
+                robotDirection = PlaceHelper.GetRobotDirection(placeValues[3]);
+            }
+
+            if(x.HasValue && y.HasValue)
+            {
+                if(updateRobotDirection)
                 {
-                    if(!robot.Place(x.Value, y.Value, robotDirection.Value))
+                    if(!robotDirection.HasValue || !robot.Place(x.Value, y.Value, robotDirection.Value))
                     {
                         Console.WriteLine($"Unable to place robot at ({x.Value},{y.Value},{robotDirection.Value}");
+                    }
+                }
+                else
+                {
+                    if(!robot.Place(x.Value, y.Value))
+                    {
+                        Console.WriteLine($"Unable to place robot at ({x.Value},{y.Value})");                        
                     }
                 }
             }

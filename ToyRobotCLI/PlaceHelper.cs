@@ -5,57 +5,35 @@ namespace ToyRobotCLI
     public class PlaceHelper
     {
         /// <summary>
-        /// Converts the text from the console input to an int will return null if nothing is entered
+        /// Converts the text from the number input (EG 3,) to an int will return null if unable to parse
         /// </summary>
         /// <param name="message">Message to be displayed</param>
         /// <returns></returns>
-        public static int? GetNumber(string message)
+        public static int? GetNumber(string numberInput)
         {
-            Console.WriteLine(message);
-            var input = Console.ReadLine();
-            if (String.IsNullOrWhiteSpace(input))
+            numberInput = new string(numberInput.Where(c => !char.IsPunctuation(c)).ToArray());
+            int? result = null;
+            if(int.TryParse(numberInput, out int val))
             {
-                return null;
+                result = val;
             }
-
-            int number;
-            //checks for valid number
-            while (!int.TryParse(input, out number))
-            {
-                Console.WriteLine(message);
-                input = Console.ReadLine();
-                if (input == null)
-                {
-                    return null;
-                }
-            }
-            return number;
+            return result;
         }
 
         /// <summary>
-        /// Converts the text from the console input to a RobotDirection will return null if nothing is entered
+        /// Converts the text from the direction input (EG NORTH) to a RobotDirection will return null if unable to parse
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
-        public static RobotDirection? GetRobotDirection(string message)
+        public static RobotDirection? GetRobotDirection(string directionInput)
         {
-            RobotDirection robotDirection;
-            Console.WriteLine(message);
-            var input = Console.ReadLine();
-            if (String.IsNullOrWhiteSpace(input))
-            {
-                return null;
-            }
+            directionInput = directionInput.Trim();
+            RobotDirection? robotDirection = null;
             
             //Parses the north, south, east, west to the enum
-            while (Enum.TryParse(input.ToLower(), out robotDirection))
+            if (Enum.TryParse(directionInput.ToUpper(), out RobotDirection val))
             {
-                Console.WriteLine(message);
-                input = Console.ReadLine();
-                if (input == null)
-                {
-                    return null;
-                }
+                robotDirection = val;
             }
             return robotDirection;
         }
