@@ -6,7 +6,7 @@ Robot robot = new Robot(table);
 
 Console.WriteLine("Welcome to the toy robot 1000");
 Console.WriteLine($"Please enter one of the following commands{Environment.NewLine}" +
-    $"\tPLACE{Environment.NewLine}\tMOVE{Environment.NewLine}\tLEFT{Environment.NewLine}\tRIGHT{Environment.NewLine}\tREPORT{Environment.NewLine}\tQuit to Exit");
+    $"\t- PLACE{Environment.NewLine}\t- MOVE{Environment.NewLine}\t- LEFT{Environment.NewLine}\t- RIGHT{Environment.NewLine}\t- REPORT{Environment.NewLine}\t- Quit to Exit");
 var action = Console.ReadLine();
 
 while(action?.ToLower() != "quit")
@@ -21,7 +21,7 @@ while(action?.ToLower() != "quit")
             //null returns to the menu
             if (y.HasValue)
             {
-                RobotDirection? robotDirection = PlaceHelper.GetRobotDirection("Please enter robot direction (NORHT, SOUTH, EAST, WEST, Empty to exit)");
+                RobotDirection? robotDirection = PlaceHelper.GetRobotDirection($"Please enter robot direction ({RobotDirection.NORTH}, {RobotDirection.SOUTH}, {RobotDirection.EAST}, {RobotDirection.WEST}, Empty to exit)");
                 //null returns to the menu
                 if (robotDirection.HasValue)
                 {
@@ -70,6 +70,6 @@ while(action?.ToLower() != "quit")
     }
 
     Console.WriteLine($"{Environment.NewLine}{Environment.NewLine}Please enter one of the following commands{Environment.NewLine}" +
-        $"\tPLACE X, Y, DIRECTION(NORTH, SOUTH, EAST, WEST){Environment.NewLine}\tMOVE{Environment.NewLine}\tLEFT{Environment.NewLine}\tRIGHT{Environment.NewLine}\tREPORT{Environment.NewLine}");
+    $"\t- PLACE{Environment.NewLine}\t- MOVE{Environment.NewLine}\t- LEFT{Environment.NewLine}\t- RIGHT{Environment.NewLine}\t- REPORT{Environment.NewLine}\t- Quit to Exit");
     action = Console.ReadLine();
 }
